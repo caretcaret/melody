@@ -1,15 +1,19 @@
 {
-	"name": "melody",
-	"version": "0.0.1",
-	"private": true,
-	"scripts": {
-		"start": "node --harmony app.js"
-	},
-	"dependencies": {
-		"express": "3.x",
-		"passport": "*",
-		"mongoose": "*",
-		"underscore": "*",
-		"node-sass": "*"
-	}
+  "name": "melody",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node --harmony app.js"
+  },
+  "dependencies": {
+    "connect-mongo": "*",
+    "express": "3.x",
+    "express3-handlebars": "*",
+    "express-slash": "*",
+    "mongoose": "*",
+    "node-sass": "*",
+    "passport": "*",
+    "socket.io": "*",
+    "underscore": "*"
+  }
 }
