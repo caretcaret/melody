@@ -1,10 +1,12 @@
 var _ = require('underscore'),
-  path = require('path');
 
 global = {
-  root: path.normalize(__dirname + '/../'),
+  root: __dirname,
   app: {
-    name: 'Melody'
+    name: 'melody'
+  },
+  scrypt: {
+    maxtime: 0.1
   }
 };
 
@@ -14,7 +16,10 @@ development = {
     host: 'localhost'
   },
   port: 3000,
-  secret: 'development',
+  cookie: {
+    secret: 'development',
+    maxAge: 1000 * 60 * 60 * 24 * 7
+  }
 };
 
 test = {
@@ -23,7 +28,10 @@ test = {
     host: 'localhost'
   },
   port: 3000,
-  secret: 'testing'
+  cookie: {
+    secret: 'testing',
+    maxAge: 1000 * 60 * 60 * 24 * 7
+  }
 };
 
 production = {
@@ -32,7 +40,10 @@ production = {
     host: 'localhost'
   },
   port: 80,
-  secret: 'production' // change to actual secret
+  cookie: {
+    secret: 'production', // change to actual secret
+    maxAge: 1000 * 60 * 60 * 24 * 7
+  }
 };
 
 

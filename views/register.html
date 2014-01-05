@@ -1,7 +1,8 @@
 <div class="container">
-  <form class="form-register" role="form" action="#" method="POST">
-    <h2>Sign up</h2>
-    <input type="text" name="email" class="form-control" placeholder="Email address" required autofocus>
+  <form class="register" role="form" action="/register" method="POST">
+    <h2>Register</h2>
+    <input type="text" name="name" class="form-control" placeholder="Name" required autofocus>
+    <input type="text" name="email" class="form-control" placeholder="Email address" required>
     <input type="password" name="password" class="form-control" placeholder="Password" required>
     <input type="hidden" name="_csrf" value="{{token}}">
 
