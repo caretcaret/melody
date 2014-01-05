@@ -2,7 +2,7 @@ var _ = require('underscore'),
   path = require('path');
 
 global = {
-  root: path.normalize(__dirname + '../'),
+  root: path.normalize(__dirname + '/../'),
   app: {
     name: 'Melody'
   }

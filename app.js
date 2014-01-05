@@ -3,6 +3,8 @@ var express = require('express'),
   exphbs = require('express3-handlebars'),
   mongoose = require('mongoose'),
   MongoStore = require('connect-mongo')(express),
+  sass = require('node-sass'),
+  flash = require('connect-flash'),
   env = process.env.NODE_ENV || 'development',
   config = require('./config/config')[env];
 
@@ -21,6 +23,7 @@ app.set('view engine', 'html');
 app.set('port', config.port);
 app.set('title', config.app.name);
 
+// middlewares
 app.use(express.logger('dev'));
 app.use(express.compress());
 app.use(express.json());
@@ -28,15 +31,28 @@ app.use(express.urlencoded());
 app.use(express.methodOverride());
 
 app.use(express.cookieParser());
+// use MongoDB to hold session data
 app.use(express.session({
   secret: config.secret,
-  maxAge: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+  maxAge: 1000 * 60 * 60 * 24 * 7,
   store: new MongoStore(config.db)
 }));
+// prevent CSRF attacks
+app.use(express.csrf());
+app.use(flash());
 
 app.enable('strict routing');
 app.use(app.router);
+// have slashes in URIs be significant
 app.use(slash());
+// set up node-sass to compile and serve any uncompiled scss
+app.use(sass.middleware({
+  src: config.root,
+  dest: config.root + '/public',
+  debug: true,
+  outputStyle: 'compressed'
+}));
+// serve static files from /public
 app.use(express.static(config.root + '/public'));
 
 if (env === 'development' || env === 'test') {
@@ -48,13 +64,34 @@ if (env === 'development' || env === 'test') {
   app.use(express.errorHandler());
 }
 
+// csrf route middleware; place before controller function to use
+function csrf(req, res, next) {
+  res.locals.token = req.csrfToken();
+  next();
+}
+
 app.get('/', function(req, res) {
-  res.render('home', {text: 'hello world'});
+  var texts = [
+    'Pretty notes for fun and profit.',
+    'Your mom wishes you were this good.',
+    'This is what freedom sounds like.',
+    'Better than bitcoin.'
+  ];
+  var text = texts[Math.floor(Math.random() * texts.length)];
+  res.render('home', {text: text, title: 'home'});
+});
+app.get('/register', csrf, function(req, res) {
+  res.render('register', {title: 'register'});
+});
+app.get('/page/:name', function(req, res) {
+  res.render('page', {});
+});
+app.get('/terms', function(req, res) {
+  res.render('terms', {title: 'terms of service'});
 });
 
-
-function dburl(dbobj) {
-  return 'mongodb://' + dbobj.host + '/' + dbobj.db;
+function dburl(options) {
+  return 'mongodb://' + options.host + '/' + options.db;
 }
 
 mongoose.connect(dburl(config.db));

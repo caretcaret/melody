@@ -1,0 +1,47 @@
+@mixin box-sizing($box-model) {
+  -webkit-box-sizing: $box-model;
+     -moz-box-sizing: $box-model;
+          box-sizing: $box-model;
+}
+
+body {
+  /* to make space for fixed navbar */
+  margin-top: 50px;
+  margin-bottom: 20px;
+}
+.jumbotron {
+  background: #eeeeee;
+}
+.navbar {
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+.form-register {
+  max-width: 400px;
+  padding: 15px;
+  margin: 0 auto;
+  text-align: center;
+
+  h2 {
+    padding-bottom: 20px;
+  }
+
+  .form-control {
+    position: relative;
+    font-size: 16px;
+    height: auto;
+    padding: 10px;
+    @include box-sizing(border-box);
+
+    &:focus {
+      z-index: 2;
+    }
+  }
+
+  p {
+    margin: 20px auto;
+  }
+}
+
+.terms {
+  text-align: center;
+}
