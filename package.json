@@ -11,6 +11,7 @@
     "express": "3.x",
     "express3-handlebars": "*",
     "express-slash": "*",
+    "express-validator": "*",
     "mongoose": "*",
     "node-sass": "*",
     "passport": "*",

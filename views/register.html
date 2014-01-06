@@ -1,7 +1,7 @@
 <div class="container">
-  <form class="register" role="form" action="/register" method="POST">
+  <form class="bare" role="form" action="/register" method="post">
     <h2>Register</h2>
-    <input type="text" name="name" class="form-control" placeholder="Name" required autofocus>
+    <input type="text" name="name" class="form-control" placeholder="Name or username" required autofocus>
     <input type="text" name="email" class="form-control" placeholder="Email address" required>
     <input type="password" name="password" class="form-control" placeholder="Password" required>
     <input type="hidden" name="_csrf" value="{{token}}">
@@ -9,5 +9,6 @@
     <button class="btn btn-primary btn-block" type="submit">Create my account</button>
 
     <p>By signing up, you agree to the <a href="/terms">Terms of Service</a>.</p>
+    <p>Have an account? <a href="/login">Log in</a>!</p>
   </form>
 </div>

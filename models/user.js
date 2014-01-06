@@ -1,6 +1,8 @@
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema,
-	scrypt = require('scrypt');
+	scrypt = require('scrypt'),
+	env = process.env.NODE_ENV || 'development',
+  config = require('../config')[env];
 
 var userSchema = new Schema({
 	email: { type: String, required: true, unique: true },
@@ -8,8 +10,8 @@ var userSchema = new Schema({
 	passhash: { type: String, required: true }
 });
 
-// takes in a password and a callback(err) function, where err is false if there
-// was no error. asynchronously hashes the password using scrypt.
+// takes in a password and a callback(err) function.
+// asynchronously hashes the password using scrypt.
 userSchema.methods.setPassword = function(password, next) {
 	var user = this;
 	scrypt.passwordHash(password, config.scrypt.maxtime, function(err, passhash) {
