@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node --harmony app.js"
+    "start": "node --harmony app-forever.js"
   },
   "dependencies": {
     "connect-mongo": "*",
@@ -12,6 +12,7 @@
     "express3-handlebars": "*",
     "express-slash": "*",
     "express-validator": "*",
+    "forever-monitor": "*",
     "mongoose": "*",
     "node-sass": "*",
     "passport": "*",
