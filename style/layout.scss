@@ -24,7 +24,9 @@ form.bare {
   h2 {
     padding-bottom: 20px;
   }
-
+  .form-group {
+    margin: 0;
+  }
   .form-control {
     position: relative;
     font-size: 16px;
@@ -40,4 +42,9 @@ form.bare {
   p {
     margin: 15px auto 0 auto;
   }
+}
+
+.flush {
+  /* helper class to remove all margins */
+  margin: 0 !important;
 }

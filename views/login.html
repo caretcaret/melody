@@ -1,7 +1,13 @@
 <div class="container">
   <form class="bare" role="form" action="/login" method="post">
     <h2>Log in</h2>
-    <input type="text" name="email" class="form-control" placeholder="Email address" required autofocus>
+    {{#each errors}}
+      <div class="alert alert-danger alert-dismissable flush">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        {{this}}
+      </div>
+    {{/each}}
+    <input type="email" name="email" class="form-control" placeholder="Email address" required autofocus>
     <input type="password" name="password" class="form-control" placeholder="Password" required>
     <input type="hidden" name="_csrf" value="{{token}}">
 

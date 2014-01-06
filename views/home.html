@@ -1,4 +1,10 @@
 {{>navbar}}
+{{#each errors}}
+  <div class="alert alert-danger alert-dismissable flush">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{this}}
+  </div>
+{{/each}}
 <div class="jumbotron">
   <div class="container">
     <h1>melody</h1>

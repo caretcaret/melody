@@ -10,13 +10,14 @@
       <a class="navbar-brand" href="/">melody</a>
     </div>
     <div class="navbar-collapse collapse">
-      <form class="navbar-form navbar-right" role="form">
+      <form class="navbar-form navbar-right" role="form" action="/login" method="post">
         <div class="form-group">
-          <input type="text" placeholder="Email" class="form-control">
-        </div>
+          <input type="email" placeholder="Email" name="email" class="form-control" required autofocus>
+        </div>&thinsp;
         <div class="form-group">
-          <input type="password" placeholder="Password" class="form-control">
-        </div>
+          <input type="password" placeholder="Password" name="password" class="form-control" required>
+        </div>&thinsp;
+        <input type="hidden" name="_csrf" value="{{token}}">
         <button type="submit" class="btn btn-success">Log in</button>
       </form>
     </div>
