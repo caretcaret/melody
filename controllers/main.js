@@ -2,14 +2,23 @@ var User = require('../models/user'),
   _ = require('underscore'),
   passport = require('passport');
 
+// passport route middleware for routes that require authentication
+function requireLogin(req, res, next) {
+  if (!req.isAuthenticated()) {
+    req.flash('error', 'Please log in or register.');
+    return res.redirect('/');
+  }
+  next();
+}
+
 // csrf route middleware; place before controller function to use
-function generate_csrf(req, res, next) {
+function generateToken(req, res, next) {
   res.locals.token = req.csrfToken();
   return next();
 }
 
 module.exports = function(app) {
-  app.get('/', generate_csrf, function(req, res) {
+  app.get('/', generateToken, function(req, res) {
     var texts = [
       'Pretty notes for fun and profit.',
       'Your mom wishes you were this good.',
@@ -20,10 +29,10 @@ module.exports = function(app) {
     var text = texts[Math.floor(Math.random() * texts.length)];
     res.render('home', {text: text, errors: req.flash('error')});
   });
-  app.get('/register', generate_csrf, function(req, res) {
+  app.get('/register', generateToken, function(req, res) {
     res.render('register', {title: 'Register'});
   });
-  app.post('/register', generate_csrf, function(req, res) {
+  app.post('/register', generateToken, function(req, res) {
     req.body.email = req.body.email.toLowerCase();
     req.sanitize('name').trim();
     req.sanitize('email').trim();
@@ -90,7 +99,7 @@ module.exports = function(app) {
     });
 
   });
-  app.get('/login', generate_csrf, function(req, res) {
+  app.get('/login', generateToken, function(req, res) {
     var errors = req.flash('error');
     res.render('login', {
       title: 'Log in',
@@ -103,10 +112,14 @@ module.exports = function(app) {
       failureRedirect: '/login',
       failureFlash: 'Invalid username or password.'
     }));
-  app.get('/notes', function(req, res) {
-    res.render('notes', {});
+  app.get('/notes', generateToken, requireLogin, function(req, res) {
+    res.render('notes', {user: req.user});
   });
-  app.get('/terms', generate_csrf, function(req, res) {
+  app.post('/logout', function(req, res) {
+    req.logout();
+    res.redirect('/');
+  });
+  app.get('/terms', generateToken, function(req, res) {
     res.render('terms', {title: 'Terms of Service'});
   });
 
