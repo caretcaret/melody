@@ -15,6 +15,15 @@ body {
 .navbar {
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
 }
+
+// fix responsive navbar dropdown
+.container > .navbar-header, .container > .navbar-collapse {
+  background: white;
+}
+.navbar-toggle .icon-bar {
+  background-color: black;
+}
+
 form.bare {
   max-width: 400px;
   padding: 15px;

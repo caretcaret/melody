@@ -2,13 +2,23 @@ var User = require('../models/user'),
   _ = require('underscore'),
   passport = require('passport');
 
-// passport route middleware for routes that require authentication
-function requireLogin(req, res, next) {
+// use for routes that require authentication; user is automatically
+// added to handlebars vars.
+function requireAuth(req, res, next) {
   if (!req.isAuthenticated()) {
     req.flash('error', 'Please log in or register.');
     return res.redirect('/');
   }
+  res.locals.user = req.user;
   next();
+}
+
+// populates handlebars local vars with user, if logged in.
+function optionalAuth(req, res, next) {
+  if (req.isAuthenticated()) {
+    res.locals.user = req.user;
+  }
+  return next();
 }
 
 // csrf route middleware; place before controller function to use
@@ -18,18 +28,20 @@ function generateToken(req, res, next) {
 }
 
 module.exports = function(app) {
-  app.get('/', generateToken, function(req, res) {
+  app.get('/', generateToken, optionalAuth, function(req, res) {
     var texts = [
-      'Pretty notes for fun and profit.',
-      'Your mom wishes you were this good.',
-      'This is what freedom sounds like.',
-      'Better than bitcoin.',
-      'We collect all your data and then give it back to you.'
+      "Pretty notes for fun and profit.",
+      "Your mom wishes you were this good.",
+      "This is what freedom sounds like.",
+      "Better than bitcoin.",
+      "We collect all your data and then give it back to you. And you'll like it.",
+      "Now with 200% more kittens.",
+      "5 out of 5 dentists recommend it."
     ];
     var text = texts[Math.floor(Math.random() * texts.length)];
     res.render('home', {text: text, errors: req.flash('error')});
   });
-  app.get('/register', generateToken, function(req, res) {
+  app.get('/register', generateToken, optionalAuth, function(req, res) {
     res.render('register', {title: 'Register'});
   });
   app.post('/register', generateToken, function(req, res) {
@@ -112,14 +124,14 @@ module.exports = function(app) {
       failureRedirect: '/login',
       failureFlash: 'Invalid username or password.'
     }));
-  app.get('/notes', generateToken, requireLogin, function(req, res) {
-    res.render('notes', {user: req.user});
+  app.get('/notes', generateToken, requireAuth, function(req, res) {
+    res.render('notes');
   });
   app.post('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
   });
-  app.get('/terms', generateToken, function(req, res) {
+  app.get('/terms', generateToken, optionalAuth, function(req, res) {
     res.render('terms', {title: 'Terms of Service'});
   });
 

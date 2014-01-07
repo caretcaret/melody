@@ -1,15 +1,12 @@
 {{>navbar}}
-{{#each errors}}
-  <div class="alert alert-danger alert-dismissable flush">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    {{this}}
-  </div>
-{{/each}}
+{{>error_flash}}
 <div class="jumbotron">
   <div class="container">
     <h1>melody</h1>
     <p>{{text}}</p>
-    <p><a href="/register" class="btn btn-primary btn-lg" role="button">Sign up &raquo;</a></p>
+    {{#unless user}}
+      <p><a href="/register" class="btn btn-primary btn-lg" role="button">Sign up &raquo;</a></p>
+    {{/unless}}
   </div>
 </div>
 {{>footer}}

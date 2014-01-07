@@ -1,23 +1,28 @@
 <div class="container">
   <form class="bare" role="form" action="/register" method="post">
     <h2>Register</h2>
+      {{#if user}}
+        <div class="alert alert-warning flush">
+          Looks like you're already logged in as {{user.name}}.
+        </div>
+      {{/if}}
     <div class="form-group {{#if errors.name}}has-error{{/if}}">
-    	{{#if errors.name}}
-    		<label class="control-label" for="name">{{errors.name.msg}}</label>
-    	{{/if}}
-    	<input type="text" name="name" id="name" class="form-control" placeholder="Name or username" required autofocus {{#if values.name}}value="{{values.name}}"{{/if}}>
+      {{#if errors.name}}
+        <label class="control-label" for="name">{{errors.name.msg}}</label>
+      {{/if}}
+      <input type="text" name="name" id="name" class="form-control" placeholder="Name or username" required autofocus {{#if values.name}}value="{{values.name}}"{{/if}}>
     </div>
     <div class="form-group {{#if errors.email}}has-error{{/if}}">
-    	{{#if errors.email}}
-    		<label class="control-label" for="email">{{errors.email.msg}}</label>
-    	{{/if}}
-    	<input type="email" name="email" id="email" class="form-control" placeholder="Email address" required {{#if values.email}}value="{{values.email}}"{{/if}}>
+      {{#if errors.email}}
+        <label class="control-label" for="email">{{errors.email.msg}}</label>
+      {{/if}}
+      <input type="email" name="email" id="email" class="form-control" placeholder="Email address" required {{#if values.email}}value="{{values.email}}"{{/if}}>
     </div>
     <div class="form-group {{#if errors.password}}has-error{{/if}}">
-    	{{#if errors.password}}
-    		<label class="control-label" for="password">{{errors.password.msg}}</label>
-    	{{/if}}
-    	<input type="password" name="password" id="password" class="form-control" placeholder="Password" required>
+      {{#if errors.password}}
+        <label class="control-label" for="password">{{errors.password.msg}}</label>
+      {{/if}}
+      <input type="password" name="password" id="password" class="form-control" placeholder="Password" required>
     </div>
     <input type="hidden" name="_csrf" value="{{token}}">
 
