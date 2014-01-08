@@ -2,9 +2,11 @@
   <p>TODO: notes interface goes here.</p>
 
   <p>Logged in as {{user.email}} with name {{user.name}}.</p>
-
+  <textarea cols="50" rows="20"></textarea>
   <form method="post" action="/logout">
     <button class="btn btn-link" type="submit">Log out</button>
     <input type="hidden" name="_csrf" value="{{token}}">
   </form>
 </div>
+
+<script src="/scripts/device.js"></script>
