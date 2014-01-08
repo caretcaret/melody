@@ -7,6 +7,11 @@
     <button class="btn btn-link" type="submit">Log out</button>
     <input type="hidden" name="_csrf" value="{{token}}">
   </form>
+  <form method="post" action="/upload" enctype="multipart/form-data" class="bare" role="form">
+  	<input type="file" name="uploadFile" class="form-control" required>
+  	<input type="hidden" name="_csrf" value="{{token}}">
+  	<button class="btn btn-primary btn-block" type="submit">Upload</button>
+  </form>
 </div>
 
 <script src="/scripts/device.js"></script>

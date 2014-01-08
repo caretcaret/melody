@@ -19,6 +19,7 @@
     "passport-local": "*",
     "scrypt": "*",
     "socket.io": "*",
-    "underscore": "*"
+    "underscore": "*",
+    "fileupload": "*"
   }
 }
