@@ -19,6 +19,7 @@
     "parted": "*",
     "passport": "*",
     "passport-local": "*",
+    "passport.socketio" : "*",
     "scrypt": "*",
     "socket.io": "*",
     "underscore": "*"

@@ -36,7 +36,11 @@ module.exports = function(app) {
       "Better than bitcoin.",
       "We collect all your data and then give it back to you. And you'll like it.",
       "Now with 200% more kittens.",
-      "5 out of 5 dentists recommend it."
+      "5 out of 5 dentists recommend it.",
+      "sudo rm -rf /",
+      "It's like drinking all night and not waking up with a hangover.",
+      "Well, what are you waiting for?",
+      "1110111110010111011001100011110111111011011100101100001"
     ];
     var text = texts[Math.floor(Math.random() * texts.length)];
     res.render('home', {text: text, errors: req.flash('error')});

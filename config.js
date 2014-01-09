@@ -17,6 +17,7 @@ development = {
   },
   port: 3000,
   cookie: {
+    key: 'dev_session',
     secret: 'development',
     maxAge: 1000 * 60 * 60 * 24 * 7
   },
@@ -35,6 +36,7 @@ test = {
   },
   port: 3000,
   cookie: {
+    key: 'test_session',
     secret: 'testing',
     maxAge: 1000 * 60 * 60 * 24 * 7
   },
@@ -53,6 +55,7 @@ production = {
   },
   port: 80,
   cookie: {
+    key: 'prod_session',
     secret: 'production', // change to actual secret
     maxAge: 1000 * 60 * 60 * 24 * 7
   },

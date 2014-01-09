@@ -1,3 +1,4 @@
+{{>navbar}}
 <div class="container">
   <p>TODO: notes interface goes here.</p>
 
@@ -15,6 +16,17 @@
   	<input type="hidden" name="_csrf" value="{{token}}">
   	<button class="btn btn-primary btn-block" type="submit">Upload</button>
   </form>
-</div>
 
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost');
+  socket.on('news', function (data) {
+    console.log(data);
+    socket.emit('my other event', { my: 'data' });
+  });
+</script>
+
+
+</div>
+{{>footer}}
 <script src="/scripts/device.js"></script>
