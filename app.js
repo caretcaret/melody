@@ -11,6 +11,7 @@ var express = require('express'),
   expressValidator = require('express-validator'),
   env = process.env.NODE_ENV || 'development',
   config = require('./config')[env],
+  parted = require('parted'),
   User = require('./models/user');
 
 // create and configure express app
@@ -32,9 +33,10 @@ app.set('title', config.app.name);
 app.use(express.logger('dev'));
 // compress responses with gzip/deflate
 app.use(express.compress());
-// safer bodyParser
-app.use(express.json());
-app.use(express.urlencoded());
+
+// parsing requests
+app.use(parted(config.parted));
+
 // pretend RESTful http methods are POSTs
 app.use(express.methodOverride());
 

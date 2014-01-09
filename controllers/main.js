@@ -1,6 +1,7 @@
 var User = require('../models/user'),
   _ = require('underscore'),
-  passport = require('passport');
+  passport = require('passport'),
+  multipart = require('parted').multipart;
 
 // use for routes that require authentication; user is automatically
 // added to handlebars vars.
@@ -100,7 +101,7 @@ module.exports = function(app) {
           param: 'email',
           msg: 'This email address is already registered.',
           value: req.body.email
-        }
+        };
         // there is at least one error, rerender register page.
         res.render('register', {
           title: 'Register',
@@ -134,5 +135,8 @@ module.exports = function(app) {
   app.get('/terms', generateToken, optionalAuth, function(req, res) {
     res.render('terms', {title: 'Terms of Service'});
   });
-
-}
+  app.post('/upload', requireAuth, function(req, res){
+    console.log(req.files);
+    res.redirect('/notes');
+  });
+};
