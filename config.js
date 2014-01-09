@@ -13,7 +13,7 @@ global = {
 development = {
   db: {
     db: 'melody-dev',
-    host: 'sgre.co'
+    host: 'localhost'
   },
   port: 3000,
   cookie: {

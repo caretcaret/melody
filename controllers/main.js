@@ -1,7 +1,6 @@
 var User = require('../models/user'),
   _ = require('underscore'),
-  passport = require('passport'),
-  multipart = require('parted').multipart;
+  passport = require('passport');
 
 // use for routes that require authentication; user is automatically
 // added to handlebars vars.

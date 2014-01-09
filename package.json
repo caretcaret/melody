@@ -13,13 +13,14 @@
     "express-slash": "*",
     "express-validator": "*",
     "forever-monitor": "*",
+    "mkdirp": "*",
     "mongoose": "*",
     "node-sass": "*",
+    "parted": "*",
     "passport": "*",
     "passport-local": "*",
     "scrypt": "*",
     "socket.io": "*",
-    "underscore": "*",
-    "parted": "*"
+    "underscore": "*"
   }
 }
