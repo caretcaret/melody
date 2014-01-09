@@ -152,9 +152,16 @@ device.onPaste = function(handler) {
 };
 
 // drag and drop
-device.dragAndDrop = false;
 device.onDrop = function(handler) {
-
+  document.body.ondrop = function(event) {
+    // currently returns a FileList object
+    // TODO: make more consistent with clipboard events
+    handler(event.dataTransfer.files);
+    event.preventDefault();
+  };
+  document.body.ondragover = function(event) {
+    return false;
+  };
 };
 
 // video/audio recording
@@ -194,4 +201,7 @@ device.initPaste();
 device.onPaste(function(value) {
   console.log(value.type + ' paste received!');
   console.log(value.data);
+});
+device.onDrop(function(value) {
+  console.log('drop detected');
 });
