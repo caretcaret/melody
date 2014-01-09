@@ -20,6 +20,6 @@
     "scrypt": "*",
     "socket.io": "*",
     "underscore": "*",
-    "busboy": "*"
+    "parted": "*"
   }
 }

@@ -19,6 +19,12 @@ development = {
   cookie: {
     secret: 'development',
     maxAge: 1000 * 60 * 60 * 24 * 7
+  },
+  parted: {
+    path: __dirname + '/upload',
+    limit: 30 * 1024,
+    diskLimit: 30 * 1024 * 1024,
+    stream: true
   }
 };
 
@@ -31,6 +37,12 @@ test = {
   cookie: {
     secret: 'testing',
     maxAge: 1000 * 60 * 60 * 24 * 7
+  },
+  parted: {
+    path: __dirname + '/upload',
+    limit: 30 * 1024,
+    diskLimit: 30 * 1024 * 1024,
+    stream: true
   }
 };
 
@@ -43,6 +55,12 @@ production = {
   cookie: {
     secret: 'production', // change to actual secret
     maxAge: 1000 * 60 * 60 * 24 * 7
+  },
+  parted: {
+    path: __dirname + '/upload',
+    limit: 30 * 1024,
+    diskLimit: 30 * 1024 * 1024,
+    stream: true
   }
 };
 

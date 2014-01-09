@@ -1,7 +1,7 @@
 var User = require('../models/user'),
   _ = require('underscore'),
   passport = require('passport'),
-  Busboy = require('busboy');
+  multipart = require('parted').multipart;
 
 // use for routes that require authentication; user is automatically
 // added to handlebars vars.
@@ -136,32 +136,7 @@ module.exports = function(app) {
     res.render('terms', {title: 'Terms of Service'});
   });
   app.post('/upload', requireAuth, function(req, res){
-    var uploadPath = '../upload';
-    var infiles = 0, outfiles = 0, done = false,
-        busboy = new Busboy({headers: req.headers});
-    var onFile = function(fieldname, file, filename, next) {
-      var fstream = fs.createWriteStream(path.join(uploadPath, path.basename(filename)));
-      file.on('end', function() {
-        console.log(fieldname + '(' + filename + ') EOF');
-      });
-      fstream.on('close', function() {
-        console.log(fieldname + '(' + filename + ') written to disk');
-        next();
-      });
-      console.log(fieldname + '(' + filename + ') start saving');
-      file.pipe(fstream);
-    };
-    busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
-      ++infiles;
-      onFile(fieldname, file, filename, function() {
-        ++outfiles;
-        if (done)
-          console.log(outfiles + '/' + infiles + ' parts written to disk');
-        if (done && infiles === outfiles) {
-          console.log('All parts written to disk');
-          return res.redirect('/notes');
-        }
-      });
-    });
+    console.log(req.files);
+    res.redirect('/notes');
   });
 };
