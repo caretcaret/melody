@@ -76,6 +76,11 @@ device.onPaste = function(handler) {
     }
     // if there is one HTMLImageElement, an image has been pasted
     if (nodes.length === 1 && nodes[0].tagName === "IMG") {
+      // if using safari, the URI is some unusable format, discard it
+      if (nodes[0].src.indexOf('webkit-fake-url') !== -1) {
+        return null;
+      }
+      // in Firefox (and probably IE), URI is a data URI in base64
       var imageBlob = dataURItoBlob(nodes[0].src);
       return handler(new ClipboardValue('image', imageBlob));
     }
