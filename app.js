@@ -12,6 +12,7 @@ var express = require('express'),
   env = process.env.NODE_ENV || 'development',
   config = require('./config')[env],
   parted = require('parted'),
+  mkdirp = require('mkdirp'),
   User = require('./models/user');
 
 // create and configure express app
@@ -36,6 +37,8 @@ app.use(express.compress());
 
 // parsing requests
 app.use(parted(config.parted));
+// make sure the uploads folder exists
+mkdirp(config.parted.path);
 
 // pretend RESTful http methods are POSTs
 app.use(express.methodOverride());
