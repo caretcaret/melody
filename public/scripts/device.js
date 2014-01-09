@@ -166,7 +166,6 @@ device.onDrop = function(handler) {
 };
 
 // video/audio recording
-device.record = false;
 device.startRecording = function(handler) {
 
 };
@@ -183,20 +182,75 @@ device.takePicture = function(handler) {
 
 };
 
-// geolocation
-device.geolocation = false;
-device.onLocationUpdate = function(handler) {
-
+// geolocation; pass in two callbacks
+device.onLocationUpdate = function(success, error) {
+  if (device.strategy.geolocation) {
+    device.locationWatcher = navigator.geolocation.watchPosition(
+      success, error, device.strategy.geolocation);
+  }
+  // TODO: track locationWatcher and stop watching when
+  // device.strategies.geolocation becomes null
+  // Also consider the fact that geolocation.getCurrentPosition
+  // and .watchPosition for the permission every time it is called,
+  // so perhaps the best strategy is to leave geolocation on.
 };
 
-// battery management & page visibility
-device.battery = false;
-device.getBatteryLevel = function(handler) {
-
+// battery management and page visibility strategies
+// use battery level, charging status, and page visibility to
+// determine whether to have a feature enabled
+device.strategies = {
+  dead: {
+    geolocation: null
+  },
+  low: {
+    geolocation: {
+      enableHighAccuracy: false,
+      timeout: 60 * 1000,
+      maximumAge: 60 * 1000
+    }
+  },
+  high: {
+    geolocation: {
+      enableHighAccuracy: true,
+      timeout: 60 * 1000,
+      maximumAge: 10 * 1000
+    }
+  },
+  charging: {
+    geolocation: {
+      enableHighAccuracy: true,
+      timeout: 60 * 1000,
+      maximumAge: 10 * 1000
+    }
+  }
 };
-device.useBatteryStrategy = function(strategy) {
+// by default, be safe on usage
+device.strategy = device.strategies.low;
 
+device.calcAutoStrategy = function() {
+  var battery = navigator.battery || navigator.webkitBattery ||
+    navigator.mozBattery || navigator.msBattery;
+  var hidden = document.hidden || document.webkitHidden ||
+    document.mozHidden || document.msHidden;
+
+  // TODO: assign device.strategy depending on hidden,
+  // battery.level, battery.charging, battery.chargingTime,
+  // battery.dischargingTime
 };
+device.autoStrategy = function() {
+  var battery = navigator.battery || navigator.webkitBattery ||
+    navigator.mozBattery || navigator.msBattery;
+  battery.onlevelchange = device.calcAutoStrategy;
+  battery.onchargingchange = device.calcAutoStrategy;
+  document.onvisibilitychange = device.calcAutoStrategy;
+};
+// use preset, static strategies
+device.useStrategy = function(strategy) {
+  device.strategy = device.strategies[strategy];
+};
+
+
+/** initialize stuff for the page **/
 
 device.initPaste();
 device.onPaste(function(value) {
@@ -207,3 +261,4 @@ device.onPaste(function(value) {
 device.onDrop(function(value) {
   console.log('drop detected');
 });
+device.autoStrategy();
