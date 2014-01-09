@@ -4,16 +4,14 @@
           box-sizing: $box-model;
 }
 
-body {
-  /* to make space for fixed navbar */
-  margin-top: 50px;
-  margin-bottom: 20px;
-}
 .jumbotron {
   background: #eeeeee;
 }
 .navbar {
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+.navbar-static-top {
+  margin-bottom: 0;
 }
 
 // fix responsive navbar dropdown

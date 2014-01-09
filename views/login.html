@@ -1,6 +1,11 @@
 <div class="container">
   <form class="bare" role="form" action="/login" method="post">
     <h2>Log in</h2>
+    {{#if user}}
+      <div class="alert alert-warning flush">
+        Looks like you're already logged in as {{user.name}}.
+      </div>
+    {{/if}}
     {{>error_flash}}
     <input type="email" name="email" class="form-control" placeholder="Email address" required autofocus>
     <input type="password" name="password" class="form-control" placeholder="Password" required>

@@ -21,14 +21,8 @@ function optionalAuth(req, res, next) {
   return next();
 }
 
-// csrf route middleware; place before controller function to use
-function generateToken(req, res, next) {
-  res.locals.token = req.csrfToken();
-  return next();
-}
-
 module.exports = function(app) {
-  app.get('/', generateToken, optionalAuth, function(req, res) {
+  app.get('/', optionalAuth, function(req, res) {
     var texts = [
       "Pretty notes for fun and profit.",
       "Your mom wishes you were this good.",
@@ -45,10 +39,10 @@ module.exports = function(app) {
     var text = texts[Math.floor(Math.random() * texts.length)];
     res.render('home', {text: text, errors: req.flash('error')});
   });
-  app.get('/register', generateToken, optionalAuth, function(req, res) {
+  app.get('/register', optionalAuth, function(req, res) {
     res.render('register', {title: 'Register'});
   });
-  app.post('/register', generateToken, function(req, res) {
+  app.post('/register', function(req, res) {
     req.body.email = req.body.email.toLowerCase();
     req.sanitize('name').trim();
     req.sanitize('email').trim();
@@ -115,7 +109,7 @@ module.exports = function(app) {
     });
 
   });
-  app.get('/login', generateToken, function(req, res) {
+  app.get('/login', optionalAuth, function(req, res) {
     var errors = req.flash('error');
     res.render('login', {
       title: 'Log in',
@@ -128,14 +122,14 @@ module.exports = function(app) {
       failureRedirect: '/login',
       failureFlash: 'Invalid username or password.'
     }));
-  app.get('/notes', generateToken, requireAuth, function(req, res) {
+  app.get('/notes', requireAuth, function(req, res) {
     res.render('notes');
   });
   app.post('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
   });
-  app.get('/terms', generateToken, optionalAuth, function(req, res) {
+  app.get('/terms', optionalAuth, function(req, res) {
     res.render('terms', {title: 'Terms of Service'});
   });
   app.post('/upload', requireAuth, function(req, res){

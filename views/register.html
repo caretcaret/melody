@@ -1,11 +1,11 @@
 <div class="container">
   <form class="bare" role="form" action="/register" method="post">
     <h2>Register</h2>
-      {{#if user}}
-        <div class="alert alert-warning flush">
-          Looks like you're already logged in as {{user.name}}.
-        </div>
-      {{/if}}
+    {{#if user}}
+      <div class="alert alert-warning flush">
+        Looks like you're already logged in as {{user.name}}.
+      </div>
+    {{/if}}
     <div class="form-group {{#if errors.name}}has-error{{/if}}">
       {{#if errors.name}}
         <label class="control-label" for="name">{{errors.name.msg}}</label>

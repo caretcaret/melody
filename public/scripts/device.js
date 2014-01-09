@@ -50,7 +50,6 @@ device.initPaste = function() {
   // take advantage of IE's onbeforepaste as well, which triggers
   // when a menu containing the paste command is opened
   window.onbeforepaste = window.onkeydown;
-  console.log("ready to accept pastes");
 };
 
 // this method only fires when the focus is not on a text input, so
@@ -224,8 +223,8 @@ device.strategies = {
     }
   }
 };
-// by default, be safe on usage
-device.strategy = device.strategies.low;
+// for now, maximize features since battery API won't work for a while.
+device.strategy = device.strategies.charging;
 
 device.calcAutoStrategy = function() {
   var battery = navigator.battery || navigator.webkitBattery ||
@@ -236,17 +235,24 @@ device.calcAutoStrategy = function() {
   // TODO: assign device.strategy depending on hidden,
   // battery.level, battery.charging, battery.chargingTime,
   // battery.dischargingTime
+  // ONLY Firefox supports this right now, low priority.
 };
 device.autoStrategy = function() {
   var battery = navigator.battery || navigator.webkitBattery ||
     navigator.mozBattery || navigator.msBattery;
-  battery.onlevelchange = device.calcAutoStrategy;
-  battery.onchargingchange = device.calcAutoStrategy;
-  document.onvisibilitychange = device.calcAutoStrategy;
+  if (battery) {
+    battery.onlevelchange = device.calcAutoStrategy;
+    battery.onchargingchange = device.calcAutoStrategy;
+    document.onvisibilitychange = device.calcAutoStrategy;
+  }
 };
 // use preset, static strategies
 device.useStrategy = function(strategy) {
-  device.strategy = device.strategies[strategy];
+  if (strategy === 'auto') {
+    device.autoStrategy();
+  } else {
+    device.strategy = device.strategies[strategy];
+  }
 };
 
 
@@ -261,4 +267,4 @@ device.onPaste(function(value) {
 device.onDrop(function(value) {
   console.log('drop detected');
 });
-device.autoStrategy();
+device.useStrategy('auto');

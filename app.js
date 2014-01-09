@@ -54,7 +54,6 @@ app.use(express.cookieParser());
 
 // use MongoDB to hold session data
 app.use(express.session({
-  //key: config.cookie.key,
   secret: config.cookie.secret,
   maxAge: config.cookie.maxAge,
   store: cstore
@@ -66,6 +65,17 @@ app.use(passport.session());
 
 // prevent CSRF attacks
 app.use(express.csrf());
+// generate token for handlebars on every request
+app.use(function(req, res, next) {
+  res.locals.token = req.csrfToken();
+  return next();
+});
+
+// access config from templates
+app.use(function(req, res, next) {
+  res.locals.config = config;
+  return next();
+});
 
 // flash message support
 app.use(flash());
@@ -149,30 +159,31 @@ db.once('open', function() {
   console.log("Database connection open");
   var server = require('http').createServer(app);
   var io = require('socket.io').listen(server);
-  var acceptConnection = function(data, accept){
-    console.log('accepted connection');
-    accept(null,true);
+  var acceptConnection = function(data, accept) {
+    accept(null, true);
   };
-  var rejectConnection = function(data, message, error, accept){
-    if (error){
-      throw new Error(message);
+  var rejectConnection = function(data, message, error, accept) {
+    if (error) {
+      console.error("Rejected connection: " + error);
     }
-    console.log('rejected connection');
-    accept(null,false);
+    accept(null, false);
   };
+
   io.set('authorization', passportSocketIo.authorize({
     cookieParser: express.cookieParser,
-    secret:      config.cookie.secret,
-    store:       cstore,
-    success:     acceptConnection,
-    fail:        rejectConnection
+    secret: config.cookie.secret,
+    store: cstore,
+    success: acceptConnection,
+    fail: rejectConnection
   }));
-  io.sockets.on('connection', function (socket) {
-    socket.emit('news', { hello: 'world' });
-    socket.on('my other event', function (data) {
-      console.log(data);
+
+  io.sockets.on('connection', function(socket) {
+    socket.emit('userinfo', {
+      name: socket.handshake.user.name,
+      email: socket.handshake.user.email
     });
   });
+
   server.listen(app.get('port'));
   console.log("Web server listening on port " + app.get('port'));
 });
