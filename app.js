@@ -118,7 +118,7 @@ passport.deserializeUser(function(id, done) {
   User.findOne({ _id: ObjectId(id) }, function(err, user) {
     done(err, user);
   });
-})
+});
 
 // attach routes and controllers
 require('./controllers/main')(app);
