@@ -50,6 +50,7 @@ device.initPaste = function() {
   // take advantage of IE's onbeforepaste as well, which triggers
   // when a menu containing the paste command is opened
   window.onbeforepaste = window.onkeydown;
+  console.log("ready to accept pastes");
 };
 
 // this method only fires when the focus is not on a text input, so
@@ -201,6 +202,7 @@ device.initPaste();
 device.onPaste(function(value) {
   console.log(value.type + ' paste received!');
   console.log(value.data);
+  document.getElementById('wuddup').innerHTML = value.data;
 });
 device.onDrop(function(value) {
   console.log('drop detected');

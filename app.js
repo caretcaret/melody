@@ -32,11 +32,13 @@ app.set('title', config.app.name);
 
 // middlewares
 app.use(express.logger('dev'));
+
 // compress responses with gzip/deflate
 app.use(express.compress());
 
 // parsing requests
 app.use(parted(config.parted));
+
 // make sure the uploads folder exists
 mkdirp(config.parted.path);
 
@@ -47,17 +49,21 @@ app.use(express.methodOverride());
 app.use(expressValidator());
 // cookies
 app.use(express.cookieParser());
+
 // use MongoDB to hold session data
 app.use(express.session({
   secret: config.cookie.secret,
   maxAge: config.cookie.maxAge,
   store: new MongoStore(config.db)
 }));
+
 // authentication
 app.use(passport.initialize());
 app.use(passport.session());
+
 // prevent CSRF attacks
 app.use(express.csrf());
+
 // flash message support
 app.use(flash());
 
@@ -65,6 +71,7 @@ app.use(flash());
 app.enable('strict routing');
 app.use(app.router);
 app.use(slash());
+
 // set up node-sass to compile and serve any uncompiled scss
 app.use(sass.middleware({
   src: config.root,
@@ -72,6 +79,7 @@ app.use(sass.middleware({
   debug: true,
   outputStyle: 'compressed'
 }));
+
 // serve static files from /public
 app.use(express.static(config.root + '/public'));
 
@@ -121,7 +129,7 @@ passport.deserializeUser(function(id, done) {
   User.findOne({ _id: ObjectId(id) }, function(err, user) {
     done(err, user);
   });
-})
+});
 
 // attach routes and controllers
 require('./controllers/main')(app);
