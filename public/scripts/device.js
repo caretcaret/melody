@@ -3,16 +3,16 @@
 var device = {};
 
 // an object type to return from onPaste
-function ClipboardValue(type, data, attachments) {
+function ClipboardValue(type, data) {
   // either 'text', 'image', 'html'
   this.type = type;
-  // a string (plaintext), a file handle, html source, depending on the type
+  // a string (plaintext), a Blob, html source, depending on the type
   this.data = data;
-  this.attachments = attachments;
 }
 
 // clipboard
 device.initPaste = function() {
+  if (device.pasteCatcher) return;
   var pasteCatcher = document.createElement('div');
   pasteCatcher.setAttribute('contenteditable', '');
   // make div invisible
@@ -21,6 +21,7 @@ device.initPaste = function() {
   pasteCatcher.style.marginTop = "-9001px";
   pasteCatcher.id = "pasteCatcher";
   document.body.appendChild(pasteCatcher);
+  device.pasteCatcher = pasteCatcher;
 
   // initially focus on nothing.
   document.body.focus();
@@ -29,7 +30,7 @@ device.initPaste = function() {
     // to begin with, or there is no text selection (so user can copy)
     var selectionEmpty = true;
     if (window.getSelection) {
-      selectionEmpty = !(window.getSelection().toString());
+      selectionEmpty = !window.getSelection().toString();
     } else if (document.selection && document.selection.type !== 'Control') {
       selectionEmpty = !document.selection.createRange().text;
     }
@@ -54,31 +55,51 @@ device.initPaste = function() {
 // this method only fires when the focus is not on a text input, so
 // that pasting in the regular text input works as normal.
 device.onPaste = function(handler) {
+  var pasteCatcher = device.pasteCatcher;
 
-  function checkPasteCatcher() {
-    var pasteCatcher = document.getElementById("pasteCatcher");
-    var child = pasteCatcher.childNodes[0];
-    console.log(child);
-    // TODO: convert child into a ClipboardValue and pass into handler
-    handler(null);
-    pasteCatcher.innerHTML = "";
+  // thanks http://stackoverflow.com/questions/4998908
+  function dataURItoBlob(dataURI) {
+    var byteString = atob(dataURI.split(',')[1]);
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+    var ab = new ArrayBuffer(byteString.length);
+    var ia = new Uint8Array(ab);
+    for (var i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
   }
 
-  document.onpaste = function(event) {
+  function checkPasteCatcher() {
+    var nodes = pasteCatcher.childNodes;
+    if (nodes.length === 0) {
+      return null;
+    }
+    // if there is one HTMLImageElement, an image has been pasted
+    if (nodes.length === 1 && nodes[0].tagName === "IMG") {
+      var imageBlob = dataURItoBlob(nodes[0].src);
+      return handler(new ClipboardValue('image', imageBlob));
+    }
+    // if there are no nodes besides Text nodes, return the plain text
+    if (pasteCatcher.children.length === 0) {
+      return handler(new ClipboardValue('text', nodes[0].wholeText));
+    }
+    // otherwise, treat everything as some HTML and return it
+    return handler(new ClipboardValue('html', pasteCatcher.innerHTML));
+  }
+
+  pasteCatcher.onpaste = function(event) {
     // only if we're pasting into the pasteCatcher do we want to do anything.
-    if (event.target.id === 'pasteCatcher') {
+    //if (event.target.id === 'pasteCatcher') {
       // clear the paste catcher so it only contains the clipboard data
-      document.getElementById('pasteCatcher').innerHTML = "";
+      pasteCatcher.innerHTML = "";
 
       var data = event.clipboardData || event.originalEvent.clipboardData;
       // are we in Chrome? Chrome and Firefox support event.clipboardData
       if (data) {
         var items = data.items;
-        //console.log(JSON.stringify(data.files));
         // does it have the .items attribute? If so, we're in luck
         // and probably using Chrome.
         if (items) {
-          console.log(JSON.stringify(data));
           // clipboardData is a DataTransfer object with:
           // clipboardData.items is a DataTransferItemsList object. Each
           // element of the list has a .kind which is either "string" or
@@ -86,9 +107,6 @@ device.onPaste = function(handler) {
           // a file, get the File object with .getAsFile(). If it is a string,
           // get it with .getAsString(callback) where callback takes in the
           // string.
-          // clipboardData.files is a FileList object containing any
-          // images/attachment refs in an HTML paste (with type text/html).
-          // First, loop through the items array to find an image.
           for (var i = 0; i < items.length; i++) {
             if (items[i].type.indexOf('image') !== -1) {
               var file = items[i].getAsFile();
@@ -124,7 +142,7 @@ device.onPaste = function(handler) {
       // wait some time for the content to be pasted, then get its contents
       // since the onpaste event runs before the content is inserted
       setTimeout(checkPasteCatcher, 100);
-    }
+    //}
   };
 };
 
@@ -168,6 +186,7 @@ device.useBatteryStrategy = function(strategy) {
 };
 
 device.initPaste();
-device.onPaste(function(){
-  console.log('paste received!');
+device.onPaste(function(value) {
+  console.log(value.type + ' paste received!');
+  console.log(value.data);
 });
