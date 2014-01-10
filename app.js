@@ -157,9 +157,15 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
 db.once('open', function() {
+
   console.log("Database connection open");
+
+  //set up server
   var server = require('http').createServer(app);
+
+  //set up socket.io server
   var io = require('socket.io').listen(server);
+
   var acceptConnection = function(data, accept) {
     accept(null, true);
   };
@@ -170,6 +176,14 @@ db.once('open', function() {
     accept(null, false);
   };
 
+  //configure socket.io
+  io.set('origins', config.host + ':' + config.port);
+  io.set('log level', config.socket.logLevel);
+  io.enable('browser client minification');
+  io.enable('browser client etag');
+  io.enable('browser client gzip');
+
+  //force authorization before handshaking
   io.set('authorization', passportSocketIo.authorize({
     cookieParser: express.cookieParser,
     secret: config.cookie.secret,
@@ -177,7 +191,7 @@ db.once('open', function() {
     success: acceptConnection,
     fail: rejectConnection
   }));
-
+  
   io.sockets.on('connection', function(socket) {
     socket.emit('userinfo', {
       name: socket.handshake.user.name,
