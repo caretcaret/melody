@@ -26,6 +26,9 @@ development = {
     limit: 30 * 1024,
     diskLimit: 30 * 1024 * 1024,
     stream: true
+  },
+  socket: {
+    logLevel: 2
   }
 };
 
@@ -45,6 +48,9 @@ test = {
     limit: 30 * 1024,
     diskLimit: 30 * 1024 * 1024,
     stream: true
+  },
+  socket: {
+    logLevel: 1
   }
 };
 
@@ -64,6 +70,9 @@ production = {
     limit: 30 * 1024,
     diskLimit: 30 * 1024 * 1024,
     stream: true
+  },
+  socket: {
+    logLevel: 0
   }
 };
 
