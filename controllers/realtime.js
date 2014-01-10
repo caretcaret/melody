@@ -15,6 +15,7 @@ module.exports = function(io) {
       socket.emit('createTextAck', "Receiving " + value.type + ": " +
           value.data.length + " chars");
       notes.handle(socket.handshake.user.email, value);
+      socket.emit('doneCreatingText', value.data);
     });
 
     ss(socket).on('createImage', function(stream, data) {

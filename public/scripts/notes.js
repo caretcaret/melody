@@ -1,13 +1,6 @@
-socket.on('userinfo', function (data) {
-  $('#log').text(new Date() + " " + JSON.stringify(data) + "\n");
-});
-
-socket.on('createTextAck', function(msg) {
-  $('#log').text(new Date() + " " + msg + "\n");
-});
-
-socket.on('createImageAck', function(msg) {
-  $('#log').text(new Date() + " " + msg + "\n");
+socket.on('doneCreatingText', function(data){
+  var newDiv = '<div class="note">' + data + '</div>';
+  $('#noteContainer').append(newDiv);
 });
 
 // if the app is in a state to accept pastes and upload them
