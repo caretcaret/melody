@@ -10,12 +10,18 @@ module.exports = function(io) {
     });
 
     socket.on('createText', function(value) {
-      //console.log("createText - %s sent %s containing %d bytes",
-      //  socket.handshake.user.email, value.type, value.data.length);
+      //send acknowledgement
       socket.emit('createTextAck', "Receiving " + value.type + ": " +
           value.data.length + " chars");
-      notes.handle(socket.handshake.user.email, value);
-      socket.emit('doneCreatingText', value.data);
+
+      //handle the new note
+      notes.handle(socket.handshake.user.email, value, function(id){
+        //tell client that we're done handling
+        socket.emit('doneCreatingText', {
+          data: value.data,
+          id: id,
+        });
+      });
     });
 
     ss(socket).on('createImage', function(stream, data) {
@@ -24,6 +30,10 @@ module.exports = function(io) {
         stream.pipe(fs.createWriteStream('./upload/test.png'));
         socket.emit('createImageAck', "Receiving image: " +
           data.size + " bytes");
+    });
+
+    socket.on('hideNote', function(id){
+      notes.hide(id);
     });
   });
 };

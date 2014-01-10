@@ -12,7 +12,7 @@ function generateSlug(){
 	return result;
 }
 
-exports.handle = function(user, data){
+exports.handle = function(user, data, next){
 	User.lookupByEmail(user, function(err,user){
 		//check for errors
 		if (err) {
@@ -23,6 +23,7 @@ exports.handle = function(user, data){
         //assume user is found, since he must be logged in
         //generate note object based on data
         var now = new Date();
+        var slug = generateSlug();
         var newNote = {
 			owner : user._id,
 			collaborators : [],
@@ -32,8 +33,8 @@ exports.handle = function(user, data){
 			created : now,
 			modified : now,
 			title : "Untitled",
-			visibility : data.visibility,
-			shareId : generateSlug()
+			visibility : "show",
+			shareId : slug
         };
         var note = new Note(newNote);
         note.save(function(err){
@@ -42,6 +43,17 @@ exports.handle = function(user, data){
 				req.flash('error', err);
 				return res.redirect('/');
 			}
+			next(slug);
         });
+	});
+};
+
+exports.hide = function(id){
+	Note.updateVisibility(id, "hide", function(err){
+		if (err) {
+			console.log("[ERROR] could not save note: " + err);
+			req.flash('error', err);
+			return res.redirect('/');
+		}
 	});
 };

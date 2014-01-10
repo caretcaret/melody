@@ -19,7 +19,11 @@ var noteSchema = new Schema({
 });
 
 noteSchema.statics.lookupByUserId = function(id, next){
-  this.find({'owner': id}).exec(next);
+  this.find({'owner': id, 'visibility' : 'show'}).exec(next);
+};
+
+noteSchema.statics.updateVisibility = function(id, v, next){
+  this.update({shareId: id}, {$set: {visibility: v}}).exec(next);
 };
 
 module.exports = mongoose.model('Note', noteSchema, 'notes');

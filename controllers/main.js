@@ -131,6 +131,7 @@ module.exports = function(app) {
         return res.redirect('/');
       } else {
         res.render('notes', {
+          layout: 'notes_ui',
           title: 'Notes',
           errors: req.flash('error'),
           notes: userNotes

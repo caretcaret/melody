@@ -1,6 +1,16 @@
+var hideNote = function(){
+  socket.emit('hideNote', $(this).attr('id'));
+};
+
+$('.note').bind('closed.bs.alert', hideNote);
+
+// after a note is saved to database, update the page
 socket.on('doneCreatingText', function(data){
-  var newDiv = '<div class="note">' + data + '</div>';
+  console.log(data);
+  var button = '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>';
+  var newDiv = '<div class="note" id="'+ data.id +'">' + button + data.data + '</div>';
   $('#noteContainer').append(newDiv);
+  $('#'+data.id).bind('closed.bs.alert', hideNote);
 });
 
 // if the app is in a state to accept pastes and upload them

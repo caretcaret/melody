@@ -12,16 +12,10 @@
   <div id="noteContainer">
   	{{#each notes}}
   		<div class="note" id="{{this.shareId}}">
+  			<button type="button" class="close" data-dismiss="alert" 
+  				 aria-hidden="true">&times;</button>
   			{{{this.data}}}
   		</div>	
   	{{/each}}
   </div>
 </div>
-
-<script src="/scripts/device.js"></script>
-<script src="/socket.io/socket.io.js"></script>
-<script src="/scripts/socket.io-stream.js"></script>
-<script>
-var socket = io.connect("{{config.host}}");
-</script>
-<script src="/scripts/notes.js"></script>

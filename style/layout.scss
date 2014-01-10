@@ -64,3 +64,11 @@ form.bare {
   max-width:500px;
   max-height:300px;
 }
+
+.note .close{
+  display:none;
+}
+
+.note:hover .close{
+  display:block;
+}
