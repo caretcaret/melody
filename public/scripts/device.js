@@ -35,20 +35,18 @@ device.initPaste = function() {
       selectionEmpty = !document.selection.createRange().text;
     }
     if (document.activeElement === document.body && selectionEmpty) {
-      if (event.metaKey){
+      if (event.metaKey)
         pasteCatcher.focus();
-      }
-      else{
-          switch (event.keyCode || event.which || window.event.keyCode) {
-            case 16: // shift for shift + insert
-            case 17: // ctrl for ctrl + v
-            case 91: // left cmd for cmd + v in chrome?
-            case 93: // right cmd for chrome
-            case 224: // cmd in firefox?
-              // reaim the focus
-              pasteCatcher.focus();
-              break;
-          }
+      // fallback
+      switch (event.keyCode || event.which || window.event.keyCode) {
+        case 16: // shift for shift + insert
+        case 17: // ctrl for ctrl + v
+        case 91: // left cmd for cmd + v in chrome
+        case 93: // right cmd for chrome
+        case 224: // cmd in firefox
+          // reaim the focus
+          pasteCatcher.focus();
+          break;
       }
     }
   }

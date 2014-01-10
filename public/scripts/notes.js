@@ -1,13 +1,13 @@
 socket.on('userinfo', function (data) {
-  $('#log').append(JSON.stringify(data) + "\n");
+  $('#log').text(new Date() + " " + JSON.stringify(data) + "\n");
 });
 
 socket.on('createTextAck', function(msg) {
-  $('#log').append(msg + "\n");
+  $('#log').text(new Date() + " " + msg + "\n");
 });
 
 socket.on('createImageAck', function(msg) {
-  $('#log').append(msg + "\n");
+  $('#log').text(new Date() + " " + msg + "\n");
 });
 
 // if the app is in a state to accept pastes and upload them
