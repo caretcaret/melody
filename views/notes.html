@@ -7,22 +7,14 @@
     <input type="hidden" name="_csrf" value="{{token}}">
   </form>
 
-  <!-- for testing purposes -->
-  <div style="height:300px;width:300px;border:solid 1px black;" id="wuddup"></div>
-
-  <form method="post" action="/upload" enctype="multipart/form-data" class="bare" role="form">
-  	<input type="file" name="uploadFile" class="form-control" required>
-  	<input type="hidden" name="_csrf" value="{{token}}">
-  	<button class="btn btn-primary btn-block" type="submit">Upload</button>
-  </form>
+  <p>Paste something (text/html/image data) to send it to the server.</p>
+  <textarea cols="50" rows="15" id="log"></textarea>
 </div>
 
 <script src="/scripts/device.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/scripts/socket.io-stream.js"></script>
 <script>
-  var socket = io.connect('{{config.host}}:{{config.port}}');
-  socket.on('userinfo', function (data) {
-    console.log(data);
-  });
+var socket = io.connect("{{config.host}}");
 </script>
+<script src="/scripts/notes.js"></script>

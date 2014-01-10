@@ -15,7 +15,6 @@ var express = require('express'),
   mkdirp = require('mkdirp'),
   User = require('./models/user'),
   passportSocketIo = require("passport.socketio"),
-  ss = require('socket.io-stream'),
   cstore = new MongoStore(config.db);
 
 // create and configure express app
@@ -178,12 +177,8 @@ db.once('open', function() {
     fail: rejectConnection
   }));
 
-  io.sockets.on('connection', function(socket) {
-    socket.emit('userinfo', {
-      name: socket.handshake.user.name,
-      email: socket.handshake.user.email
-    });
-  });
+  // socket.io behavior in ./controllers/realtime.js
+  require('./controllers/realtime')(io);
 
   server.listen(app.get('port'));
   console.log("Web server listening on port " + app.get('port'));

@@ -259,11 +259,6 @@ device.useStrategy = function(strategy) {
 /** initialize stuff for the page **/
 
 device.initPaste();
-device.onPaste(function(value) {
-  console.log(value.type + ' paste received!');
-  console.log(value.data);
-  document.getElementById('wuddup').innerHTML = value.data;
-});
 device.onDrop(function(value) {
   console.log('drop detected');
 });
