@@ -36,6 +36,8 @@ exports.handle = function(user, data, next){
 			visibility : "show",
 			shareId : slug
         };
+
+        //save note object to database
         var note = new Note(newNote);
         note.save(function(err){
 			if (err) {
@@ -49,6 +51,10 @@ exports.handle = function(user, data, next){
 };
 
 exports.hide = function(id){
+
+	//TODO: add security to make sure only owner can hide his notes
+
+	//hiding an object doesn't delete it, just sets a flag
 	Note.updateVisibility(id, "hide", function(err){
 		if (err) {
 			console.log("[ERROR] could not save note: " + err);
