@@ -38,15 +38,17 @@ device.initPaste = function() {
       if (event.metaKey)
         pasteCatcher.focus();
       // fallback
-      switch (event.keyCode || event.which || window.event.keyCode) {
-        case 16: // shift for shift + insert
-        case 17: // ctrl for ctrl + v
-        case 91: // left cmd for cmd + v in chrome
-        case 93: // right cmd for chrome
-        case 224: // cmd in firefox
-          // reaim the focus
-          pasteCatcher.focus();
-          break;
+      else{
+        switch (event.keyCode || event.which || window.event.keyCode) {
+          case 16: // shift for shift + insert
+          case 17: // ctrl for ctrl + v
+          case 91: // left cmd for cmd + v in chrome
+          case 93: // right cmd for chrome
+          case 224: // cmd in firefox
+            // reaim the focus
+            pasteCatcher.focus();
+            break;
+        }
       }
     }
   }
