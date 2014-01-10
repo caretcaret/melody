@@ -1,4 +1,5 @@
 var User = require('../models/user'),
+  Note = require('../models/note'),
   _ = require('underscore'),
   passport = require('passport');
 
@@ -123,7 +124,19 @@ module.exports = function(app) {
       failureFlash: 'Invalid username or password.'
     }));
   app.get('/notes', requireAuth, function(req, res) {
-    res.render('notes');
+    Note.lookupByUserId(req.user._id, function(err,userNotes){
+      if (err) {
+        console.log("[ERROR] could not set user's password: " + err);
+        req.flash('error', err);
+        return res.redirect('/');
+      } else {
+        res.render('notes', {
+          title: 'Notes',
+          errors: req.flash('error'),
+          notes: userNotes
+        });
+      }
+    });
   });
   app.post('/logout', function(req, res) {
     req.logout();

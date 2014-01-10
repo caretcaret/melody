@@ -15,6 +15,7 @@ var express = require('express'),
   mkdirp = require('mkdirp'),
   User = require('./models/user'),
   passportSocketIo = require("passport.socketio"),
+  fs = require('fs'),
   cstore = new MongoStore(config.db);
 
 // create and configure express app
@@ -146,6 +147,9 @@ passport.deserializeUser(function(id, done) {
 
 // attach routes and controllers
 require('./controllers/main')(app);
+
+// attach remaining models
+require('./models/note');
 
 function dburl(options) {
   return 'mongodb://' + options.host + '/' + options.db;

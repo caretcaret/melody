@@ -1,5 +1,6 @@
 var ss = require('socket.io-stream'),
-  fs = require('fs');
+  fs = require('fs'),
+  notes = require('./notes');
 
 module.exports = function(io) {
   io.sockets.on('connection', function(socket) {
@@ -9,10 +10,11 @@ module.exports = function(io) {
     });
 
     socket.on('createText', function(value) {
-      console.log("createText - %s sent %s containing %d bytes",
-        socket.handshake.user.email, value.type, value.data.length);
-        socket.emit('createTextAck', "Receiving " + value.type + ": " +
+      //console.log("createText - %s sent %s containing %d bytes",
+      //  socket.handshake.user.email, value.type, value.data.length);
+      socket.emit('createTextAck', "Receiving " + value.type + ": " +
           value.data.length + " chars");
+      notes.handle(socket.handshake.user.email, value);
     });
 
     ss(socket).on('createImage', function(stream, data) {

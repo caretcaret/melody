@@ -22,7 +22,7 @@ userSchema.methods.setPassword = function(password, next) {
     }
     next(err);
   });
-}
+};
 
 // takes in a password and a callback(result).
 userSchema.methods.verifyPassword = function(password, next) {
@@ -33,6 +33,19 @@ userSchema.methods.verifyPassword = function(password, next) {
       next(false);
     }
   });
-}
+};
+
+userSchema.statics.lookupByEmail = function(address, next) {
+  this.findOne({'email': address}).exec(next);
+};
+
+userSchema.statics.exists = function(address, next) {
+  this.lookupByEmail(address, function(err, user){
+    if (err || !user){
+      return next(false);
+    }
+    return next(true);
+  });
+};
 
 module.exports = mongoose.model('User', userSchema, 'users');

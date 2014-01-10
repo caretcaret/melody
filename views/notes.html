@@ -9,6 +9,12 @@
 
   <p>Paste something (text/html/image data) to send it to the server.</p>
   <textarea cols="50" rows="15" id="log"></textarea>
+
+  {{#each notes}}
+  	<div class="note" id="{{this.shareId}}">
+  		{{this.data}}
+  	</div>
+  {{/each}}
 </div>
 
 <script src="/scripts/device.js"></script>
