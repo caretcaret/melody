@@ -19,6 +19,7 @@
 
 <script src="/scripts/device.js"></script>
 <script src="/socket.io/socket.io.js"></script>
+<script src="/scripts/socket.io-stream.js"></script>
 <script>
   var socket = io.connect('{{config.host}}:{{config.port}}');
   socket.on('userinfo', function (data) {

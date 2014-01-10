@@ -15,6 +15,7 @@ var express = require('express'),
   mkdirp = require('mkdirp'),
   User = require('./models/user'),
   passportSocketIo = require("passport.socketio"),
+  ss = require('socket.io-stream'),
   cstore = new MongoStore(config.db);
 
 // create and configure express app
