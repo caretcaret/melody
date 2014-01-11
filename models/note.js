@@ -22,6 +22,10 @@ noteSchema.statics.lookupByUserId = function(id, next){
   this.find({'owner': id, 'visibility' : 'show'}).exec(next);
 };
 
+noteSchema.statics.lookupImageById = function(id, next){
+  this.findOne({shareId: id}).exec(next);
+};
+
 noteSchema.statics.updateVisibility = function(id, v, next){
   this.update({shareId: id}, {$set: {visibility: v}}).exec(next);
 };

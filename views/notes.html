@@ -14,7 +14,11 @@
   		<div class="note" id="{{this.shareId}}">
   			<button type="button" class="close" data-dismiss="alert" 
   				 aria-hidden="true">&times;</button>
-  			{{{this.data}}}
+  			{{#if this.data}}
+  				{{{this.data}}}
+  			{{else}}
+  				<img src="/images/{{this.shareId}}" />
+  			{{/if}}
   		</div>	
   	{{/each}}
   </div>

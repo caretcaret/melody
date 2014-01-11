@@ -6,9 +6,16 @@ $('.note').bind('closed.bs.alert', hideNote);
 
 // after a note is saved to database, update the page
 socket.on('doneCreatingText', function(data){
-  console.log(data);
   var button = '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>';
   var newDiv = '<div class="note" id="'+ data.id +'">' + button + data.data + '</div>';
+  $('#noteContainer').append(newDiv);
+  $('#'+data.id).bind('closed.bs.alert', hideNote);
+});
+
+socket.on('doneCreatingImage', function(data){
+  var button = '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>';
+  var image = '<img src="/images/' + data.id + '">';
+  var newDiv = '<div class="note" id="'+ data.id +'">' + button + image + '</div>';
   $('#noteContainer').append(newDiv);
   $('#'+data.id).bind('closed.bs.alert', hideNote);
 });

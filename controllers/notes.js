@@ -24,18 +24,44 @@ exports.handle = function(user, data, next){
         //generate note object based on data
         var now = new Date();
         var slug = generateSlug();
-        var newNote = {
-			owner : user._id,
-			collaborators : [],
-			type : data.type,
-			source : data.source,
-			data : data.data,
-			created : now,
-			modified : now,
-			title : "Untitled",
-			visibility : "show",
-			shareId : slug
-        };
+        var newNote;
+
+        //TODO: make sure slugs are unique
+        //TODO: generate titles?
+        //TODO: figure out source of text/image/whatever
+
+        if (data.type == 'html' || data.type == 'text'){
+			newNote = {
+				owner : user._id,
+				collaborators : [],
+				type : data.type,
+				source : data.source,
+				data : data.data,
+				created : now,
+				modified : now,
+				title : "Untitled",
+				visibility : "show",
+				shareId : slug
+			};
+        }
+
+        else if (data.type == 'image'){
+			newNote = {
+				owner : user._id,
+				collaborators : [],
+				type : data.type,
+				source : data.source,
+				created : now,
+				modified : now,
+				title : "Untitled",
+				visibility : "show",
+				shareId : slug,
+				attachments: [{
+					binary: data.data,
+					mimetype: 'image/png'
+				}]
+			};
+        }
 
         //save note object to database
         var note = new Note(newNote);

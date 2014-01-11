@@ -150,4 +150,20 @@ module.exports = function(app) {
     console.log(req.files);
     res.redirect('/notes');
   });
+  app.get('/images/:id', optionalAuth, function(req,res){
+    Note.lookupImageById(req.params.id, function(err, data){
+      if (err) {
+        console.log("[ERROR] could not set user's password: " + err);
+        req.flash('error', err);
+        return res.redirect('/');
+      }
+      else {
+
+        //TODO: get this to work. for some reason the image doesn't show up
+
+        res.set('Content-Type', data.attachments[0].mimetype);
+        res.send(new Buffer(data.attachments[0].binary, 'binary'));
+      }
+    });
+  });
 };
