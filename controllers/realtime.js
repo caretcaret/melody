@@ -25,19 +25,20 @@ module.exports = function(io) {
     });
 
     ss(socket).on('createImage', function(stream, data) {
-      console.log("createImage - %s sent image containing %d bytes",
-        socket.handshake.user.email, data.size);
-      var value = new Buffer(data.size);
+      console.log("createImage - %s sent %s containing %d bytes",
+        socket.handshake.user.email, data.type, data.size);
+      var bufs = [];
       stream.on('data', function(data){
-        value += data;
+        bufs.push(data);
       });
 
       stream.on('end', function(){
+        var buf = Buffer.concat(bufs);
         socket.emit('createImageAck', "Receiving image: " +
           data.size + " bytes");
 
         //handle the new note
-        notes.handle(socket.handshake.user.email, {data: value, type: 'image'} , function(id){
+        notes.handle(socket.handshake.user.email, {data: buf, type: data.type} , function(id){
           //tell client that we're done handling
           socket.emit('doneCreatingImage', {
             id: id

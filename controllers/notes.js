@@ -45,7 +45,7 @@ exports.handle = function(user, data, next){
 			};
         }
 
-        else if (data.type == 'image'){
+        else if (data.type.indexOf('image') !== -1) {
 			newNote = {
 				owner : user._id,
 				collaborators : [],
@@ -58,7 +58,7 @@ exports.handle = function(user, data, next){
 				shareId : slug,
 				attachments: [{
 					binary: data.data,
-					mimetype: 'image/png'
+					mimetype: data.type
 				}]
 			};
         }

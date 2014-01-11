@@ -39,7 +39,8 @@ device.onPaste(function(value) {
     var stream = ss.createStream();
 
     // upload the file
-    ss(socket).emit('createImage', stream, {size: value.data.size});
+    console.log(value.data);
+    ss(socket).emit('createImage', stream, {size: value.data.size, type: value.data.type});
     ss.createBlobReadStream(value.data).pipe(stream);
   }
 });

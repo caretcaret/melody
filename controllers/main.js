@@ -124,9 +124,9 @@ module.exports = function(app) {
       failureFlash: 'Invalid username or password.'
     }));
   app.get('/notes', requireAuth, function(req, res) {
-    Note.lookupByUserId(req.user._id, function(err,userNotes){
+    Note.lookupByUserId(req.user._id, function(err,userNotes) {
       if (err) {
-        console.log("[ERROR] could not set user's password: " + err);
+        console.log("[ERROR] could not find note: " + err);
         req.flash('error', err);
         return res.redirect('/');
       } else {
@@ -153,7 +153,7 @@ module.exports = function(app) {
   app.get('/images/:id', optionalAuth, function(req,res){
     Note.lookupImageById(req.params.id, function(err, data){
       if (err) {
-        console.log("[ERROR] could not set user's password: " + err);
+        console.log("[ERROR] could not lookup image: " + err);
         req.flash('error', err);
         return res.redirect('/');
       }
@@ -162,7 +162,7 @@ module.exports = function(app) {
         //TODO: get this to work. for some reason the image doesn't show up
 
         res.set('Content-Type', data.attachments[0].mimetype);
-        res.send(new Buffer(data.attachments[0].binary, 'binary'));
+        res.send(data.attachments[0].binary);
       }
     });
   });
