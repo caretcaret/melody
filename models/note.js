@@ -6,11 +6,11 @@ var noteSchema = new Schema({
   collaborators: [{type: Schema.Types.ObjectId, ref: 'User'}],
   type: String,
   source: String,
-  data: String,
-  attachments: [{
+  data: {
     binary: Buffer,
+    text: String,
     mimetype: String
-  }],
+  },
   created: Date,
   updated: Date,
   title: String,
@@ -19,7 +19,7 @@ var noteSchema = new Schema({
 });
 
 noteSchema.statics.lookupByUserId = function(id, next){
-  this.find({'owner': id, 'visibility' : 'show'}).exec(next);
+  this.find({'owner': id, 'visibility' : 'show'}).sort('-created').exec(next);
 };
 
 noteSchema.statics.lookupImageById = function(id, next){

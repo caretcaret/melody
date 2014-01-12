@@ -63,10 +63,16 @@ form.bare {
   border: black 1px solid;
   max-width:500px;
   max-height:300px;
-}
 
-.note .close{
-  display:none;
+  .close{
+    display:none;
+  }
+
+  img {
+    max-width:480px;
+    max-height:280px;
+  }
+
 }
 
 .note:hover .close{

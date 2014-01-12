@@ -14,8 +14,8 @@
   		<div class="note" id="{{this.shareId}}">
   			<button type="button" class="close" data-dismiss="alert" 
   				 aria-hidden="true">&times;</button>
-  			{{#if this.data}}
-  				{{{this.data}}}
+  			{{#if this.data.text}}
+  				{{{this.data.text}}}
   			{{else}}
   				<img src="/images/{{this.shareId}}" />
   			{{/if}}

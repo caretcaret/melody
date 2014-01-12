@@ -31,12 +31,16 @@ exports.handle = function(user, data, next){
         //TODO: figure out source of text/image/whatever
 
         if (data.type == 'html' || data.type == 'text'){
+			var mime = data.type == 'html' ? 'text/html' : 'text/plain';
 			newNote = {
 				owner : user._id,
 				collaborators : [],
 				type : data.type,
 				source : data.source,
-				data : data.data,
+				data : {
+					text : data.data,
+					mimetype : mime
+				},
 				created : now,
 				modified : now,
 				title : "Untitled",
@@ -56,10 +60,10 @@ exports.handle = function(user, data, next){
 				title : "Untitled",
 				visibility : "show",
 				shareId : slug,
-				attachments: [{
+				data: {
 					binary: data.data,
 					mimetype: data.type
-				}]
+				}
 			};
         }
 

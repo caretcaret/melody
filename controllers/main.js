@@ -158,11 +158,8 @@ module.exports = function(app) {
         return res.redirect('/');
       }
       else {
-
-        //TODO: get this to work. for some reason the image doesn't show up
-
-        res.set('Content-Type', data.attachments[0].mimetype);
-        res.send(data.attachments[0].binary);
+        res.set('Content-Type', data.data.mimetype);
+        res.send(data.data.binary);
       }
     });
   });
