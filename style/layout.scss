@@ -85,7 +85,7 @@ form.bare {
 .dashboard {
   background: #eeeeee;
 
-  .preview-container {
+  #previewContainer {
     @include column-count(1);
     @include column-gap(10px);
     @include column-fill(auto);
@@ -101,6 +101,19 @@ form.bare {
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
     box-sizing: border-box;
     @include break-inside(avoid);
+    position: relative;
+
+    .close {
+      /* put close button above note so it is visible/clickable */
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      z-index: 10;
+      opacity: 0;
+      &:hover {
+        opacity: 1;
+      }
+    }
   }
 
   .text {
@@ -111,17 +124,17 @@ form.bare {
   }
 
   @media screen and (min-width: 640px) {
-    .preview-container {
+    #previewContainer {
       @include column-count(2);
     }
   }
   @media screen and (min-width: 992px) {
-    .preview-container {
+    #previewContainer {
       @include column-count(3);
     }
   }
   @media screen and (min-width: 1200px) {
-    .preview-container {
+    #previewContainer {
       @include column-count(4);
     }
   }

@@ -12,9 +12,10 @@
     </ul>
   </form>
 </div>
-<div class="preview-container">
+<div id="previewContainer">
   {{#each notes}}
     <div class="preview-item" id="{{this.shareId}}">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
       {{#if this.data.text}}
         <div class="text">
         {{{this.data.text}}}
