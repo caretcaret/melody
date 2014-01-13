@@ -11,7 +11,7 @@ function requireAuth(req, res, next) {
     return res.redirect('/');
   }
   res.locals.user = req.user;
-  next();
+  return next();
 }
 
 // populates handlebars local vars with user, if logged in.
@@ -35,7 +35,9 @@ module.exports = function(app) {
       "sudo rm -rf /",
       "It's like drinking all night and not waking up with a hangover.",
       "Well, what are you waiting for?",
-      "1110111110010111011001100011110111111011011100101100001"
+      "1110111110010111011001100011110111111011011100101100001",
+      "pinterest++;",
+      "evernote++;"
     ];
     var text = texts[Math.floor(Math.random() * texts.length)];
     res.render('home', {text: text, errors: req.flash('error')});
@@ -163,4 +165,10 @@ module.exports = function(app) {
       }
     });
   });
+
+  /* 
+   * TODO: write an error page (403,404,500,etc) and 
+   * change errors to redirect to that instead of "/"
+   */
+
 };
