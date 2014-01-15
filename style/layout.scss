@@ -56,25 +56,86 @@ form.bare {
   margin: 0 !important;
 }
 
-.note {
-  margin-top:10px;
-  margin-bottom:10px;
-  padding: 10px 10px 10px 10px;
-  border: black 1px solid;
-  max-width:500px;
-  max-height:300px;
+/* note previews in column view */
 
-  .close{
-    display:none;
-  }
-
-  img {
-    max-width:480px;
-    max-height:280px;
-  }
-
+@mixin column-count($n) {
+  -webkit-column-count: $n;
+     -moz-column-count: $n;
+          column-count: $n;
+}
+@mixin column-gap($gap) {
+  -webkit-column-gap: $gap;
+     -moz-column-gap: $gap;
+          column-gap: $gap;
+}
+@mixin column-fill($fill) {
+  -webkit-column-fill: $fill;
+     -moz-column-fill: $fill;
+          column-fill: $fill;
+}
+@mixin break-inside($break) {
+  -webkit-column-break-inside: $break;
+     -moz-column-break-inside: $break;
+          column-break-inside: $break;
+         -webkit-break-inside: $break;
+            -moz-break-inside: $break;
+                 break-inside: $break;
 }
 
-.note:hover .close{
-  display:block;
+.dashboard {
+  background: #eeeeee;
+
+  #previewContainer {
+    @include column-count(1);
+    @include column-gap(10px);
+    @include column-fill(auto);
+    width: 90%;
+    margin: 20px auto;
+    padding: 20px 0;
+  }
+
+  .preview-item {
+    background: white;
+    width: 100%;
+    margin: 0 0 10px 0;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    @include break-inside(avoid);
+    position: relative;
+
+    .close {
+      /* put close button above note so it is visible/clickable */
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      z-index: 10;
+      opacity: 0;
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  .text {
+    padding: 10px;
+  }
+  img.preview {
+    width: 100%;
+  }
+
+  @media screen and (min-width: 640px) {
+    #previewContainer {
+      @include column-count(2);
+    }
+  }
+  @media screen and (min-width: 992px) {
+    #previewContainer {
+      @include column-count(3);
+    }
+  }
+  @media screen and (min-width: 1200px) {
+    #previewContainer {
+      @include column-count(4);
+    }
+  }
 }

@@ -1,25 +1,28 @@
-<div class="container">
-  <p>TODO: notes interface goes here.</p>
-
-  <p>Logged in as {{user.email}} with name {{user.name}}.</p>
-  <form method="post" action="/logout">
-    <button class="btn btn-link" type="submit">Log out</button>
-    <input type="hidden" name="_csrf" value="{{token}}">
+<div class="btn-group btn-group-justified">
+  <a class="btn btn-primary">melody</a>
+  <a  class="btn btn-primary">search or new <i class="fa-search"></i></a>
+  <form class="btn-group">
+    <a id="userDropdown" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+      {{user.name}} <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="userDropdown">
+      <li><a href="/settings">Settings</a></li>
+      <li class="divider"></li>
+      <li><a href="/logout">Logout</a></li>
+    </ul>
   </form>
-
-  <p>Paste something (text/html/image data) to send it to the server.</p>
-
-  <div id="noteContainer">
-  	{{#each notes}}
-  		<div class="note" id="{{this.shareId}}">
-  			<button type="button" class="close" data-dismiss="alert" 
-  				 aria-hidden="true">&times;</button>
-  			{{#if this.data.text}}
-  				{{{this.data.text}}}
-  			{{else}}
-  				<img src="/images/{{this.shareId}}" />
-  			{{/if}}
-  		</div>	
-  	{{/each}}
-  </div>
+</div>
+<div id="previewContainer">
+  {{#each notes}}
+    <div class="preview-item" id="{{this.shareId}}">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      {{#if this.data.text}}
+        <div class="text">
+        {{{this.data.text}}}
+        </div>
+      {{else}}
+        <img src="/images/{{this.shareId}}" class="preview">
+      {{/if}}
+    </div>
+  {{/each}}
 </div>
