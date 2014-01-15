@@ -180,7 +180,6 @@ db.once('open', function() {
   };
 
   //configure socket.io
-  io.set('origins', config.host + ':' + config.port);
   io.set('log level', config.socket.logLevel);
   io.enable('browser client minification');
   io.enable('browser client etag');
