@@ -4,7 +4,7 @@ var mongoose = require('mongoose'),
 	_ = require('underscore');
 
 function generateSlug(){
-	var dict = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890";
+	var dict = "abcdefghijklmnopqrstuvwxyz01234567890";
 	var result = "";
 	for (var i = 0; i < 16; i++){
 		result += dict[Math.floor(Math.random() * dict.length)];
@@ -23,10 +23,10 @@ exports.handle = function(user, data, next){
         //assume user is found, since he must be logged in
         //generate note object based on data
         var now = new Date();
-        var slug = generateSlug();
+        var slug = generateSlug(); //7.96e24 unique values
         var newNote;
 
-        //TODO: make sure slugs are unique
+        //TODO: make sure slugs are unique (very low probability of collision)
         //TODO: generate titles?
         //TODO: figure out source of text/image/whatever
 
@@ -37,15 +37,15 @@ exports.handle = function(user, data, next){
 				collaborators : [],
 				type : data.type,
 				source : data.source,
-				data : {
-					text : data.data,
-					mimetype : mime
-				},
 				created : now,
 				modified : now,
 				title : "Untitled",
 				visibility : "show",
-				shareId : slug
+				shareId : slug,
+				data : {
+					text : data.data,
+					mimetype : mime
+				}
 			};
         }
 
@@ -80,14 +80,11 @@ exports.handle = function(user, data, next){
 	});
 };
 
-exports.hide = function(id){
-
-	//TODO: add security to make sure only owner can hide his notes
-
+exports.hide = function(id, userid){
 	//hiding an object doesn't delete it, just sets a flag
-	Note.updateVisibility(id, "hide", function(err){
+	Note.updateVisibility(id, userid, "hide", function(err){
 		if (err) {
-			console.log("[ERROR] could not save note: " + err);
+			console.log("[ERROR] could not hide note: " + err);
 			req.flash('error', err);
 			return res.redirect('/');
 		}

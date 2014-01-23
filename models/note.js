@@ -12,7 +12,7 @@ var noteSchema = new Schema({
     mimetype: String
   },
   created: Date,
-  updated: Date,
+  modified: Date,
   title: String,
   visibility: String,
   shareId: String
@@ -23,11 +23,19 @@ noteSchema.statics.lookupByUserId = function(id, next){
 };
 
 noteSchema.statics.lookupImageById = function(id, next){
-  this.findOne({shareId: id}).exec(next);
+  this.findOne({shareId: id}).exec(function(err,img){
+    if (img === null || img.type.indexOf('image') < 0){
+      e = err || "[ERROR] Requested file is not a valid image.";
+      return next(e,null);
+    }
+    else return next(null,img);
+  });
 };
 
-noteSchema.statics.updateVisibility = function(id, v, next){
-  this.update({shareId: id}, {$set: {visibility: v}}).exec(next);
+noteSchema.statics.updateVisibility = function(id, userid, vis, next){
+  var now = new Date();
+  this.update({shareId: id, owner: userid},
+    {$set: {visibility: vis, modified: now}}).exec(next);
 };
 
 module.exports = mongoose.model('Note', noteSchema, 'notes');

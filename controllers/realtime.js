@@ -34,7 +34,7 @@ module.exports = function(io) {
 
       stream.on('end', function(){
         var buf = Buffer.concat(bufs);
-        socket.emit('createImageAck', "Receiving image: " +
+        socket.emit('createImageAck', "Received image: " +
           data.size + " bytes");
 
         //handle the new note
@@ -48,7 +48,7 @@ module.exports = function(io) {
     });
 
     socket.on('hideNote', function(id){
-      notes.hide(id);
+      notes.hide(id, socket.handshake.user._id);
     });
   });
 };
