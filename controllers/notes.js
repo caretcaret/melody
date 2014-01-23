@@ -1,7 +1,16 @@
 var mongoose = require('mongoose'),
 	Note = mongoose.model('Note'),
 	User = mongoose.model('User'),
-	_ = require('underscore');
+	_ = require('underscore'),
+	fs = require('fs'),
+	modules = [],
+	modules_path = __dirname + '/../modules';
+
+
+fs.readdirSync(modules_path).forEach(function (file) {
+	modules.push(require(modules_path+'/'+file));
+});
+
 
 function generateSlug(){
 	var dict = "abcdefghijklmnopqrstuvwxyz01234567890";
@@ -11,6 +20,19 @@ function generateSlug(){
 	}
 	return result;
 }
+
+function bestHandler(note){
+	var bestModule = null, bestScore, currScore;
+	for (var i = 0; i < modules.length; i++){
+		currScore = modules[i].scorer(note);
+		if (bestModule === null || currScore > bestScore){
+			bestModule = i;
+			bestScore = currScore;
+		}
+	}
+	return modules[bestModule];
+}
+
 
 exports.handle = function(user, data, next){
 	User.lookupByEmail(user, function(err,user){
@@ -30,7 +52,14 @@ exports.handle = function(user, data, next){
         //TODO: generate titles?
         //TODO: figure out source of text/image/whatever
 
+
+        var handler = bestHandler(data);
+        console.log("best module: " + handler.type);
+
         if (data.type == 'html' || data.type == 'text'){
+			if (data.type == 'text'){
+				data.data = data.data.replace("\n","<br>");
+			}
 			var mime = data.type == 'html' ? 'text/html' : 'text/plain';
 			newNote = {
 				owner : user._id,

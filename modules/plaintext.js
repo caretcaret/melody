@@ -4,14 +4,14 @@ exports.scorer = function(note){
 		return 100;
 	}
 	if (note.type == "html"){
-		return 50;
+		return 75;
 	}
 	else return 0;
 };
 exports.extractor = function(note){
-	
+	return note.data;
 };
-exports.template = "{{data.data.text}}";
+exports.template = "{{data.text}}";
 exports.render = function(data){
-	return data.data.text;
+	return data.text;
 };
