@@ -2,4 +2,4 @@
 
 Pretty notes.
 
-`npm install` to install dependencies, `npm run` to run
+`npm install` to install dependencies, `npm start` to run
